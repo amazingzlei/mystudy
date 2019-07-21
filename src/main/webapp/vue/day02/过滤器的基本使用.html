@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>过滤器的基本使用</title>
+    <script type="text/javascript" src="../../js/jq/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+</head>
+<body>
+    <div id="app01">
+        <!-- 过滤器的使用，用管道符|表示使用过滤器,如果引用多个过滤器则继续添加管道符 -->
+        <p>{{ msg | msgformat('疯狂') | test }}</p>
+    </div>
+</body>
+<script>
+    /* 过滤器的使用 */
+    /* filter的第一个参数为过滤器的名称，
+        function后面的第一个参数为管道符|前面的数据，后面为传过来的参数
+     */
+    Vue.filter("msgformat",function(msg,replaceMsg){
+       return msg.replace(/单纯/g,replaceMsg)
+    });
+    Vue.filter("test",function (msg) {
+        return msg+'====';
+    })
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            msg:"我一个单纯的我，单纯的我总想一些单纯的事情!"
+        },
+        /* 私有过滤器，且过滤器遵循就近原则 */
+        filters:{
+            msgformat:function (msg) {
+                return msg.replace(/单纯/g,'邪恶')
+            }
+        }
+    })
+</script>
+</html>

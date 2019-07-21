@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件的切换</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <!--<link rel="stylesheet" href="../../css/animate.min.css" type="text/css">-->
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <style>
+        .v-enter,.v-leave-to{
+            opacity: 0;
+            transform: translateX(150px);
+        }
+        .v-enter-active,.v-leave-to{
+            transition: all 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- 方式一 -->
+    <div id="app01">
+        <a href="" @click.prevent="flag=true">登录</a>
+        <a href="" @click.prevent="flag=false">注册</a>
+        <login v-if="flag"></login>
+        <register v-else></register>
+    </div>
+
+    <hr>
+    <!-- 方式二 -->
+    <div id="app02">
+        <a href="" @click.prevent="componentName='login'">登录</a>
+        <a href="" @click.prevent="componentName='register'">注册</a>
+        <!-- component是一个占位符，:is用来指定想要展示的组件 -->
+        <component :is="componentName"></component>
+    </div>
+
+    <hr>
+    <!-- 添加动画 -->
+    <div id="app03">
+        <a href="" @click.prevent="componentName='login'">登录</a>
+        <a href="" @click.prevent="componentName='register'">注册</a>
+        <!-- component是一个占位符，:is用来指定想要展示的组件 -->
+        <!-- 设置组件切换模式 -->
+        <transition mode="out-in">
+            <component :is="componentName"></component>
+        </transition>
+    </div>
+</body>
+<script>
+    Vue.component("login",{
+        template:"<h3>登录组件</h3>"
+    });
+    Vue.component("register",{
+        template:"<h3>注册组件</h3>"
+    })
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            flag:true,
+            componentName : 'login'
+        }
+    })
+
+    var vm = new Vue({
+        el:"#app02",
+        data:{
+            flag:true,
+            componentName : 'login'
+        }
+    })
+
+    var vm = new Vue({
+        el:"#app03",
+        data:{
+            flag:true,
+            componentName : 'login'
+        }
+    })
+</script>
+</html>

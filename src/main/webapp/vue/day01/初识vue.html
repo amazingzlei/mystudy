@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>初识vue</title>
+</head>
+<script type="text/javascript" src="../../js/jq/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="../../js/vue/vue.js"></script>
+<body>
+    <div id="app-01">
+        <h1>name:{{name}}</h1>
+        <h1>age:{{age}}</h1>
+        <h1>address:{{address}}</h1>
+        <h1>job:{{job()}}</h1>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        // 选择哪一个DOM元素
+        el:"#app-01",
+        // 挂载的数据
+        data:{
+            name:"曾磊",
+            age:"22",
+            address:"江苏扬州"
+        },
+        // 方法
+        methods:{
+            job:function () {
+                return "程序猿"
+            }
+        }
+    })
+</script>
+</html>

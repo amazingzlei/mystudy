@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>通过ref获取DOM元素和组件引用</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+</head>
+<body>
+    <div id="app01">
+        <!-- 1.在DOM元素或者组件标签中添加ref属性 -->
+        <input type="button" value="点击" @click="myclick"/>
+        <h3 ref="myh3">这是父组件的h3</h3>
+        <login  ref="mytem"></login>
+    </div>
+    <template id="tem">
+        <h3>子组件</h3>
+    </template>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        methods:{
+            myclick:function () {
+                /* 2.通过this.$refs.ref名称.属性 获取引用 */
+                console.log(this.$refs.myh3.innerText);
+                console.log(this.$refs.mytem.msg);
+                this.$refs.mytem.show();
+            }
+        },
+        components:{
+            login:{
+                template:"#tem",
+                data:function () {
+                    return {msg:'子组件中的msg'}
+                },
+                methods:{
+                    show:function () {
+                        console.log(this.msg)
+                    }
+                }
+            }
+        }
+    })
+</script>
+</html>

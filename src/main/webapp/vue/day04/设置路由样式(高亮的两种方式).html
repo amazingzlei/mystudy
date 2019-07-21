@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>设置路由样式(高亮的两种方式)</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <!-- 1.引入vue-router.js -->
+    <script type="text/javascript" src="../../js/vue/vue-router.js"></script>
+
+    <style>
+        /* 1.修改默认样式 */
+        .router-link-active{
+            color: hotpink;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .myactive{
+            color: red;
+            text-decoration: none;
+            font-size: 20px;
+        }
+        .v-enter,.v-leave-to{
+            opacity: 0;
+            transform: translateX(150px);
+        }
+        .v-enter-active,.v-leave-active{
+            transition: all 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="app01">
+        <!-- 超链接前面必须加# -->
+        <!--<a href="#/login">登录</a>-->
+        <!--<a href="#/register">注册</a>-->
+
+        <!--
+            该标签是vue-router提供的标签，默认会被渲染为a标签， 也可以通过tag指定
+            渲染的标签，但是无论渲染成什么标签，都会有鼠标点击事件
+            该标签的用处在于不需要再URL前面加#
+        -->
+        <router-link to="/login">登录</router-link>
+        <router-link to="/register">注册</router-link>
+        <!--
+            5.创建容器 这是vue-router提供的元素，专门用来当做占位符使用。当
+            路由规则匹配到组件时，组件就会展示在router-view中
+        -->
+        <transition mode="out-in">
+            <router-view></router-view>
+        </transition>
+    </div>
+</body>
+<script>
+
+    var login = {
+        template:"<h3>登录组件</h3>"
+    };
+    var register = {
+        template:"<h3>注册组件</h3>"
+    };
+
+    /*
+        2.创建路由对象 当导入vue-router.js之后，在window全局对象中就有了路由
+        的构造函数，叫做VueRouter，在new该对象时，可以传递一个配置对象
+    */
+    var routerobj = new VueRouter({
+        /* 3.创建路由匹配规则 */
+        routes:[
+            /*
+            *  path：表示规则
+            *  component：表示使用哪一个组件，该对象必须是一个组件对象，不能是一个
+            *  组件引用名称
+            * */
+            /* redirect的作用就是重定向，后面跟一个URL路径 */
+            {path:"/",redirect:'/login'},
+            {path:"/login",component:login},
+            {path:"/register",component:register},
+        ],
+        /*
+            使用router-link 标签会默认添加router-link-active类，
+            可以通过linkActiveClass属性来修改
+        */
+        linkActiveClass:"myactive"
+    });
+
+    var vm = new Vue({
+        el:"#app01",
+        /*
+            4.将路由规则对象注册到vue中，用来监听URL地址的变化，然后展示对应组件
+        */
+        router:routerobj
+    })
+</script>
+</html>

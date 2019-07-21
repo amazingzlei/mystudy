@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>第三方CSS实现动画</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <!--<link rel="stylesheet" href="../../css/animate.min.css" type="text/css">-->
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+</head>
+<body>
+    <div id="app01">
+        <button class="btn btn-primary" @click="flag=!flag">切换</button>
+        <!-- 1.使用transition包裹被动画控制的元素 -->
+        <!-- 2.通过自定义类添加效果 注意animated必须添加 -->
+        <transition
+                enter-active-class="animated tada"
+                leave-active-class="animated bounceOutRight">
+            <h3 v-show="flag">这是一个标题</h3>
+        </transition>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            flag:true,
+        },
+    })
+</script>
+</html>

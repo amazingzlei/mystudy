@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>过渡类名实现动画</title>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/animate.min.css">
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <style>
+        /* 设置动画样式 */
+        .v-enter,.v-leave-to{
+            opacity: 0;
+            transform: translateX(100px);
+        }
+        .v-enter-active,.v-leave-active{
+            transition: all 0.8s ease;
+        }
+
+        .my-transition-enter,.my-transition-leave-to{
+            opacity: 0;
+            transform: translateX(100px);
+        }
+        .my-transition-enter-active,.my-transition-leave-active{
+            transition: all 0.8s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="app01">
+        <button class="btn btn-primary" @click="flag=!flag">切换</button>
+        <!-- 1.使用transition包裹被动画控制的元素 -->
+        <transition>
+            <h3 v-if="flag">这是一个标题</h3>
+        </transition>
+
+        <transition name="my-transition">
+            <h3 v-if="flag">这是一个标题</h3>
+        </transition>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            flag:false,
+        },
+        methods:{
+            toggle:function () {
+                this.flag = !this.flag;
+            }
+        }
+    })
+</script>
+</html>

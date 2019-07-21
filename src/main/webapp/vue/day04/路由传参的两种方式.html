@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>路由传参的两种方式</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <!-- 1.引入vue-router.js -->
+    <script type="text/javascript" src="../../js/vue/vue-router.js"></script>
+    <style>
+        .myactive{
+            text-decoration: none;
+            color: hotpink;
+            font-size: 20px;
+        }
+        .v-enter,.v-leave-to{
+            opacity: 0;
+            transform: translateX(150px);
+        }
+        .v-enter-active,.v-leave-active{
+            transition: all 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="app01">
+        <router-link to="/login?id=1&name=张三">登录</router-link>
+        <router-link to="/register/2/李四/扬州">注册</router-link>
+        <!-- 5.注册路由容器 -->
+        <transition mode="out-in">
+            <router-view></router-view>
+        </transition>
+    </div>
+</body>
+<script>
+
+    var login = {
+        /*
+            方式1. 通过this.$route.query获取路由传过来的参数 ，这时参数是以
+            ？参数1=值&参数2=值 的方式写在router-link中，不需要修改路由规则
+        */
+        template:"<h3>登录组件{{this.$route.query.id}}--->{{this.$route.query.name}}</h3>"
+    };
+    var register = {
+        template:"<h3>注册组件{{this.$route.params.id}}--->{{this.$route.params.name}}--->{{this.$route.params.address}}</h3>"
+    };
+
+    /* 2.创建路由对象 */
+    var routerObj = new VueRouter({
+        routes:[// 3.设置路由规则
+            {path:'/',redirect:'/login'},
+            {path:'/login',component:login},
+            /*
+            *   方式二:修改路由规则 通过:参数的方式修改,这时URL必须匹配路由规则，
+            *   否则不会解析出对应的组件，而router-link中的URL是Rest风格，
+            *   获取时通过this.$route.params的形式获取
+            * */
+            {path:'/register/:id/:name/:address',component:register}
+        ],
+        linkActiveClass:'myactive'
+    })
+
+    var vm = new Vue({
+        el:"#app01",
+        router:routerObj //4.注册路由
+    })
+</script>
+</html>

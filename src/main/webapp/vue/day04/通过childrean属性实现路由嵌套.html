@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>通过children属性实现路由嵌套</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <!-- 1.引入vue-router.js -->
+    <script type="text/javascript" src="../../js/vue/vue-router.js"></script>
+    <style>
+        .myactive{
+            text-decoration: none;
+            color: hotpink;
+            font-size: 20px;
+        }
+        .v-enter,.v-leave-to{
+            opacity: 0;
+            transform: translateX(150px);
+        }
+        .v-enter-active,.v-leave-active{
+            transition: all 0.6s ease;
+        }
+    </style>
+</head>
+<body>
+    <div id="app01">
+        <router-link to="/account">用户</router-link>
+        <router-link to="/admin">管理员</router-link>
+
+        <transition mode="out-in">
+            <router-view></router-view>
+        </transition>
+    </div>
+
+    <template id="tem1">
+        <div>
+            <h3>普通用户</h3>
+            <router-link to="/account/login">用户登录</router-link>
+            <router-link to="/account/register">用户注册</router-link>
+            <transition mode="out-in">
+                <router-view></router-view>
+            </transition>
+        </div>
+    </template>
+
+    <template id="tem2">
+        <div>
+            <h3>管理员</h3>
+            <router-link to="/admin/adminlogin">管理员登录</router-link>
+            <router-link to="/admin/adminregister">管理员注册</router-link>
+            <transition mode="out-in">
+                <router-view></router-view>
+            </transition>
+        </div>
+    </template>
+</body>
+<script>
+
+    var account = {
+        template:"#tem1"
+    };
+    var admin = {
+        template:"#tem2"
+    };
+
+
+    var login = {
+        template:"<h3>用户登录</h3>"
+    };
+    var register = {
+        template:"<h3>用户注册</h3>"
+    };
+    var adminlogin = {
+        template:"<h3>管理员登录</h3>"
+    };
+    var adminregister = {
+        template:"<h3>管理员注册</h3>"
+    };
+
+    var rounterobj = new VueRouter({
+        routes:[
+            {
+                path:"/",
+                redirect:'account',
+            },
+            {
+                path:"/account",
+                component:account,
+                children:[
+                    /*
+                        使用children属性实现子路由，同时子路由的path前面，不要带/,
+                        否则永远以根路径开始请求，这样会造成用户难以理解URL地址
+                        在子路由中的URL中最好指定父路由
+                    */
+                    {path:'login',component:login},
+                    {path:'register',component:register},
+                ]
+            },
+            {
+                path:"/admin",
+                component:admin,
+                children:[
+                    {path:'adminlogin',component:adminlogin},
+                    {path:'adminregister',component:adminregister},
+                ]
+            },
+        ],
+        linkActiveClass:'myactive'
+    })
+
+    var vm = new Vue({
+        el:"#app01",
+        router:rounterobj
+    })
+</script>
+</html>

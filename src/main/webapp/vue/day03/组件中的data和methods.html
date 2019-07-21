@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件中的data和methods</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <!--<link rel="stylesheet" href="../../css/animate.min.css" type="text/css">-->
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+</head>
+<body>
+    <div id="app01">
+        <login></login>
+        <login></login>
+        <login></login>
+    </div>
+    <template id="tem1">
+        <div>
+            <input type="button" value="+1" @click="add">
+            <h3>{{counter}}</h3>
+        </div>
+    </template>
+</body>
+<script>
+    var counterobj = {counter:0}
+    var vm = new Vue({
+        el:"#app01",
+        components:{
+            login:{
+                template:"#tem1",
+                /*
+                *  组件中的data必须是一个function，并且返回一个对象，目的是防止
+                *  引用同一个组件时会发生data串用
+                *  组件中的data使用方式和data一样
+                * */
+                data:function () {
+                    return {counter:0};
+                },
+                methods:{
+                    add:function () {
+                        this.counter++
+                    }
+                }
+            },
+        }
+    })
+</script>
+</html>

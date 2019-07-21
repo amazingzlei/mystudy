@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>样式绑定</title>
+    <style>
+        .red{
+            color: red;
+        }
+        .font{
+            font-size: 50px;
+        }
+        .weight{
+            font-weight: bolder;
+        }
+        .letter{
+            letter-spacing: 0.5em;
+        }
+    </style>
+</head>
+<script type="text/javascript" src="../../js/jq/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="../../js/vue/vue.js"></script>
+<body>
+    <div id="app01">
+        <!-- 使用数组绑定样式,样式名是style中的样式，如果不存在则不显示样式，如果只有一个样式，则可以删除中括号 -->
+        <p :class="['red','font']">今天天气真好!!!</p>
+        <p :class="'red'">今天天气真好!!!</p>
+        <p :class="'green'">今天天气真好!!!</p>
+
+        <!-- 使用三元运算 -->
+        <p :class="['red','font',isActive?'weight':'']">今天天气真好!!!</p>
+
+        <!-- 嵌套对象 -->
+        <p :class="['red','font',{isActive:'weight'}]">今天天气真好!!!</p>
+
+        <!-- 使用对象 -->
+        <p :class="{red:'red'}">今天天气真好!!!</p>
+
+        <!-- 使用vue对象 -->
+        <p :class="classobj">今天天气真好!!!</p>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            isActive:true,
+            classobj:{
+                red:'red',
+                weight:'weight'
+            }
+        }
+    })
+</script>
+</html>

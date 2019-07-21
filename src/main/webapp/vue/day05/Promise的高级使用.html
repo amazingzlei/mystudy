@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Promise的高级使用</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <script type="text/javascript" src="../../js/vue/axios.min.js"></script>
+    <script type="text/javascript" src="../../js/jq/jquery-2.0.3.min.js"></script>
+</head>
+<body>
+
+</body>
+<script>
+
+    /* 下面只是创建了一个形式上的异步操作。即我们只知道他是一个异步操作。具体做什么我们不知道*/
+    // var promise = new Promise();// 实际上他会报错
+
+
+    // 每当new一个Promise 实例时就会立即执行这个异步操作中的代码
+    // 也就是说new不仅能获取一个promise实例，还能立即执行我们为Promise构造函数
+    // 传递的那个function。执行function中的异步操作
+    function getImg(url) {
+        return new Promise(function (resolve,reject) {
+            /* 这是一个具体的异步操作，它是用来执行ajax的*/
+            axios.get(url).then(function (data) {
+                resolve(data);
+            }).catch(function (err) {
+                reject(err)
+            })
+        });
+    }
+
+    /* 在回调函数中，成功回调必须传，失败可以不传 */
+    // 在上一个.then中返回一个新的promise实例。可以继续用下一个.then处理
+    // getImg("../getImg").then(function (data) {
+    //     console.info("请求1发送成功->");
+    //     console.info(data.data.data);
+    //     return getImg("../getCar");
+    // }).then(function (data) {
+    //     console.info("请求2发送成功->");
+    //     console.info(data.data.data);
+    //     return getImg("../getTeacher");
+    // }).then(function (data) {
+    //     console.info("请求3发送成功->");
+    //     console.info(data.data.data);
+    // })
+
+    // getImg("../getImg").then(function (data) {
+    //     console.info("请求1发送成功->");
+    //     console.info(data.data.data);
+    //     return getImg("../getCars");
+    // }).then(function (data) {
+    //     console.info("请求2发送成功->");
+    //     console.info(data.data.data);
+    //     return getImg("../getTeacher");
+    // }).then(function (data) {
+    //     console.info("请求3发送成功->");
+    //     console.info(data.data.data);
+    // }).catch(function (err) {// 一旦发生异常，则后续操作都不再执行
+    //     console.info("请求失败");
+    //     console.info(err.message);
+    // })
+
+    /*
+    promise也对Jquery的ajax提供了支持，将原来的success和error函数
+    用.then()方式实现
+      * */
+    $(function () {
+        $.ajax({
+            url:'../getImgs',
+            type:'get',
+        }).then(function (data) {
+            console.log(data)
+        },function (err) {
+            console.log(err)
+        })
+    })
+
+</script>
+</html>

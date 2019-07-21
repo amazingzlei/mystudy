@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>组件创建的三种方式</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <!--<link rel="stylesheet" href="../../css/animate.min.css" type="text/css">-->
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+</head>
+<body>
+    <div id="app01">
+        <my-com1></my-com1>
+        <my-com2></my-com2>
+        <my-com3></my-com3>
+    </div>
+    <hr>
+
+    <div id="app02">
+        <login></login>
+    </div>
+
+    <hr>
+
+    <div id="app03">
+        <logins></logins>
+    </div>
+
+    <template id="tem1">
+        <div>
+            <h3>这是通过template标签创建的组件</h3>
+            <h2>这是通过template标签创建的组件</h2>
+        </div>
+    </template>
+
+    <template id="tem2">
+        <div>
+            <h3>这是私有的login组件</h3>
+        </div>
+    </template>
+</body>
+<script>
+    /* 方式一 */
+    /* 1.1通过Vue.extend创建组件,并返回组件对象*/
+    var com1 = Vue.extend({
+        template:"<h3>这是用Vue.extend创建出来的组件</h3>"
+    })
+    /* 1.2通过Vue.component将组件注册为html标签（成为一个真正的组件） */
+    /*
+    格式  Vue.component（标签名(组件名)，组件对象）
+    引用组件时，只需要调用标签名即可，但如果标签名是驼峰规则，则需要写成a-b的形式
+    * */
+    Vue.component("myCom1",com1);
+
+    /* 方式二 */
+    /* 直接通过Vue.component创建组件 */
+    /*
+    * 无论哪一种方式创建出的组件必须有且仅有一个根元素，否报错
+    * */
+    Vue.component("myCom2",{
+        template:"<h3>这是用Vue.component创建的组件</h3>"
+    })
+
+    /* 方式三 */
+    /* 通过template标签加载组件 */
+    Vue.component("myCom3",{
+        template:"#tem1"
+    })
+
+    var vm = new Vue({
+        el:"#app01",
+    })
+
+    var vm2 = new Vue({
+        el:"#app02",
+        /* 定义私有组件 */
+        components :{
+            /* 格式: 组件名 :{template：内容} */
+            login : {
+                template:"#tem2"
+            }
+        }
+    })
+
+
+    /* 定义一个组件字面量，即一个对象*/
+    var logins = {
+        template:"#tem2"
+    }
+
+    var vm2 = new Vue({
+        el:"#app03",
+        /* 定义私有组件 */
+        components :{
+            /* 以下方式是对简写形式，引用是直接写logins即可 */
+            logins
+        }
+    })
+</script>
+</html>

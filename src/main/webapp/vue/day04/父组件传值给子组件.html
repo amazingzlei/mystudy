@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>父组件传值给子组件</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+</head>
+<body>
+    <div id="app01">
+        <!-- 1.在组件标签中通过v-bind绑定一个自定义的属性，并赋值 -->
+        <mycom v-bind:parentmsg="msg"></mycom>
+    </div>
+    <template id="tem1">
+        <!-- 3.在子组件中引用自定义属性 -->
+        <h3 @click="change">子组件--->{{parentmsg}}</h3>
+    </template>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            msg:"父组件中data值"
+        },
+        components:{
+            mycom:{
+                template:"#tem1",
+                /* 2.在props中注册自定义的属性，这时自定义属性就是一个参数，可以被子组件调用 */
+                /*
+                 * props和data的区别
+                 * 1.data是组件私有的数据
+                 * 2.data是可读可写的，props是可读的，如果修改vue会提示错误
+                  */
+                props:['parentmsg'],
+                methods:{
+                    change:function () {
+                        this.parentmsg = "修改"
+                    }
+                }
+            }
+        }
+    })
+</script>
+</html>

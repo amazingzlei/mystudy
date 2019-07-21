@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用命名视图实现经典布局</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <!-- 1.引入vue-router.js -->
+    <script type="text/javascript" src="../../js/vue/vue-router.js"></script>
+    <style>
+
+
+        .header{
+            background-color: hotpink;
+        }
+        .content{
+            display: flex;
+            height: 600px;
+        }
+        .left{
+            flex: 2;
+            background-color: gold;
+        }
+        .main{
+            flex: 8;
+            background-color: lawngreen;
+        }
+    </style>
+</head>
+<body>
+    <div id="app01">
+        <div class="body">
+            <router-view></router-view>
+            <div class="content">
+                <!-- 命名视图，即在该标签中添加name属性 -->
+                <router-view name="left"></router-view>
+                <router-view name="main"></router-view>
+            </div>
+        </div>
+    </div>
+</body>
+<script>
+
+    var header = {
+        template:"<h3 class='header'>头部</h3>"
+    }
+
+    var leftBox = {
+        template:"<h3 class='left'>左边导航栏</h3>"
+    }
+
+    var mainBox = {
+        template:"<h3 class='main'>主体</h3>"
+    }
+
+    var routerObj = new VueRouter({
+        routes:[
+            {
+                path: '/',
+                /* 一个请求可以对应多个组件，键为视图名，值为组件对象 */
+                components: {
+                    default: header,
+                    left:leftBox,
+                    main:mainBox
+                }
+            }
+        ]
+    })
+
+    var vm = new Vue({
+        el:"#app01",
+        router:routerObj
+    })
+</script>
+</html>

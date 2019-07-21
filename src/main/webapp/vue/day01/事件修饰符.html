@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>事件修饰符</title>
+</head>
+<script type="text/javascript" src="../../js/jq/jquery-2.0.3.min.js"></script>
+<script type="text/javascript" src="../../js/vue/vue.js"></script>
+<body>
+    <div id="app01">
+        <!-- stop取消冒泡 -->
+        <div style="padding: 40px;background-color: red" @click="outclick">
+            <div style="width: 200px;height: 200px;background-color: aqua" @click="innerclick">
+                <button @click.stop="btn">点我</button>
+            </div>
+        </div>
+        <!-- prevent取消默认行为 -->
+        <a href="http://www.baidu.com" @click.prevent="baidu">百度一下</a>
+
+        <!-- capture捕获机制，即由外往里执行,当点击子元素时，标记了capture的那一层开始执行 -->
+        <div style="padding: 40px;background-color: red" @click.capture="outclick">
+            <div style="width: 200px;height: 200px;background-color: aqua" @click="innerclick">
+                <button @click="btn">点我</button>
+            </div>
+        </div>
+        <!-- self元素本身才会执行，子元素不执行 -->
+        <br>
+        <br>
+        <br>
+        <div style="padding: 40px;background-color: red" @click.self="outclick">
+            <div style="width: 200px;height: 200px;background-color: aqua" @click="innerclick">
+                <button @click="btn">点我</button>
+            </div>
+        </div>
+        <!-- once只执行一次 -->
+        <a href="http://www.baidu.com" @click.once.prevent="baidu">百度一下</a>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        methods:{
+            outclick:function () {
+                console.log("外层点击事件!")
+            },
+            innerclick:function () {
+                console.log("内层点击事件!")
+            },
+            btn:function () {
+                console.log("按钮点击事件!")
+            },
+            baidu:function () {
+                console.log("超链接点击事件!")
+            }
+        }
+    })
+</script>
+</html>

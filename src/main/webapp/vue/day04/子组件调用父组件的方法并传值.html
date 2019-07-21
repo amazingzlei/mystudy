@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>子组件调用父组件的方式并传值</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+</head>
+<body>
+    <div id="app01">
+        <!-- 1.在组件标签中通过v-on绑定父组件的方法 -->
+        <mycom v-on:fun="show"></mycom>
+    </div>
+    <template id="tem">
+        <div>
+            <h3>子组件</h3>
+            <input type="button" value="子组件的按钮" @click="myclick"/>
+        </div>
+    </template>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            dataFromson:null
+        },
+        methods:{
+            show:function (data1,data2) {
+                console.log("这是父组件的方法"+data1+"--->"+data2)
+            }
+        },
+        components:{
+            mycom:{
+                template:"#tem",
+                data:function () {
+                    return {name:"张三",age:20}
+                },
+                methods:{
+                    myclick:function () {
+                        /*
+                         * 2.通过this.$emit('方法名',参数1，参数2...)调用,在这个期间
+                         * 就可以实现子组件传参数给父组件
+                          * */
+                        this.$emit('fun',this.name,this.age)
+                    }
+                }
+            }
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用render渲染页面</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+</head>
+<body>
+    <div id="app01">
+
+    </div>
+</body>
+<script>
+
+    var login = {
+        template:"<h3>登录组件</h3>"
+    }
+
+    var vm = new Vue({
+        el:"#app01",
+        /* render是一个函数，第一个参数是一个方法，调用它能够把指定 组件模板渲染为html结构，
+         * 并代替el指定容器的所有内容，包括最外层的div
+          * */
+        render:function (createElement) {
+            return createElement(login)
+        }
+    })
+</script>
+</html>

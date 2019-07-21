@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>使用v-model实现表单自动收集</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+</head>
+<body>
+    <div id="app01">
+        <form action="xxx" @submit.prevent="doSub">
+            男:<input type="radio" name="sex" value="男" v-model="sex"/>
+            女:<input type="radio" name="sex" value="女" v-model="sex"/>
+            <br>
+            篮球:<input type="checkbox" value="篮球" v-model="hobby"/>
+            足球:<input type="checkbox" value="足球" v-model="hobby"/>
+            乒乓:<input type="checkbox" value="乒乓" v-model="hobby"/>
+            <br>
+            <select v-model="city">
+                <option v-for="item in list" :key="item.id" :value="item.id">{{item.name}}</option>
+            </select>
+        </form>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            list:[
+                {id:1,name:'扬州'},
+                {id:2,name:'南京'},
+            ],
+            sex:'男',
+            hobby:['足球'],
+            city:'2'
+        }
+    })
+</script>
+</html>

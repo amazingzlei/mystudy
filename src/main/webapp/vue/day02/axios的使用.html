@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>axios的使用</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <script type="text/javascript" src="../../js/vue/axios.min.js"></script>
+</head>
+<body>
+<div id="app01">
+    <button @click="getInfo">get请求</button>
+    <button @click="postInfo">post请求</button>
+    <!--<button @click="jsonInfo">jsonp请求</button>-->
+    <br>
+    <ul>
+        <li v-for="item in objlist">{{item.name}}</li>
+    </ul>
+</div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            objlist:[
+                {name:1}
+            ]
+        },
+        methods:{
+            getInfo:function () {
+                var _this = this;
+                axios.get("../getCar").then(function (data) {
+                    _this.objlist.splice(0,_this.objlist.length);
+                    console.log(data)
+                    for(var i=0;i<data.data.data.length;i++){
+                        _this.objlist.push(data.data.data[i]);
+                    }
+
+                })
+            },
+            postInfo:function () {
+                var _this = this;
+                axios.post("../getStudent").then(function (data) {
+                    _this.objlist.splice(0,_this.objlist.length);
+                    for(var i=0;i<data.data.data.length;i++){
+                        _this.objlist.push(data.data.data[i]);
+                    }
+
+                })
+            },
+        }
+    })
+</script>
+</html>

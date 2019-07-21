@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>easyexcel测试01</title>
+</head>
+<body>
+    <div>
+        <a href="../easyexcel/getOneSheet">导出一个sheet</a><br>
+        <a href="../easyexcel/getMoreSheet">导出多个sheet</a><br>
+
+
+        读取一个sheet:<input type="file" id="files" name="file"/><button onclick="readOneSheet()">上传</button><br>
+
+        读取多个sheet(都是学生数据):<input type="file" id="files01" name="file"/><button onclick="readMoreSameSheet()">上传</button><br>
+
+        读取多个sheet(类型不一样,有学生、教师、课程):<input type="file" name="file" id="files02"/><button onclick="readMoreSheet()">上传</button><br>
+
+        读取读取指定sheet和指定行:<input type="file" name="file" id="files03"/><button onclick="readSheet()">上传</button><br>
+
+        读取学生叫李四的信息:<input type="file" name="file" id="files04"/><button onclick="readFixName()">上传</button><br>
+    </div>
+</body>
+<script type="text/javascript" src="../js/jq/jquery-2.0.3.min.js"></script>
+<script>
+    function readOneSheet() {
+        var formData = new FormData();
+        var files=$('#files')[0].files;
+        formData.append('file', files[0]);
+        $.ajax({
+            url:"../easyexcel/readOneSheet",
+            type: "POST",
+            data: formData,
+            async: false,
+            dataType: "json",
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function (data) {
+                if(data==1){
+                    alert("导入成功")
+                }else{
+                    alert("导入失败")
+                }
+            }
+        })
+    }
+
+    function readMoreSameSheet() {
+        var formData = new FormData();
+        var files=$('#files01')[0].files;
+        formData.append('file', files[0]);
+        $.ajax({
+            url:"../easyexcel/readOneSheet",
+            type: "POST",
+            data: formData,
+            async: false,
+            dataType: "json",
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function (data) {
+                if(data==1){
+                    alert("导入成功")
+                }else{
+                    alert("导入失败")
+                }
+            }
+        })
+    }
+
+    function readMoreSheet() {
+        var formData = new FormData();
+        var files=$('#files02')[0].files;
+        formData.append('file', files[0]);
+        $.ajax({
+            url:"../easyexcel/readMoreSameSheet",
+            type: "POST",
+            data: formData,
+            async: false,
+            dataType: "json",
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function (data) {
+                if(data==1){
+                    alert("导入成功")
+                }else{
+                    alert("导入失败")
+                }
+            }
+        })
+    }
+
+    function readSheet() {
+        var formData = new FormData();
+        var files=$('#files03')[0].files;
+        formData.append('file', files[0]);
+        formData.append('sheetNum', 2);
+        formData.append('headLineNum', 0);
+        $.ajax({
+            url:"../easyexcel/readFixedSheet",
+            type: "POST",
+            data: formData,
+            async: false,
+            dataType: "json",
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function (data) {
+                if(data==1){
+                    alert("导入成功")
+                }else{
+                    alert("导入失败")
+                }
+            }
+        })
+    }
+
+    function readFixName() {
+        var formData = new FormData();
+        var files=$('#files04')[0].files;
+        formData.append('file', files[0]);
+        $.ajax({
+            url:"../easyexcel/readFixName",
+            type: "POST",
+            data: formData,
+            async: false,
+            dataType: "json",
+            cache: false,
+            processData: false,
+            contentType: false,
+            success:function (data) {
+                if(data==1){
+                    alert("导入成功")
+                }else{
+                    alert("导入失败")
+                }
+            }
+        })
+    }
+</script>
+</html>

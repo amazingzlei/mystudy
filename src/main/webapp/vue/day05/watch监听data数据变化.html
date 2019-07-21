@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>watch监听data数据变化</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+</head>
+<body>
+    <div id="app01">
+        <input type="text" v-model="firstname"/> +
+        <input type="text" v-model="lastname"/> =
+        <input type="text" v-model="fullname"/>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            firstname:'',
+            lastname:'',
+            fullname:'',
+        },
+        watch:{
+            /* firstname是data中的数据，后面需要一个function，该函数中有两个参数，
+             * 第一个参数表示新值，第二个参数表示旧值
+              * */
+            firstname:function (newVal,oldVal) {
+                this.fullname = newVal + '-' +this.lastname;
+            },
+            lastname:function (newVal,oldVal) {
+                this.fullname = this.firstname + '-' +newVal;
+            }
+        }
+    })
+</script>
+</html>

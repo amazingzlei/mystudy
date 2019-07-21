@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>v-resource的使用</title>
+    <!--<script type="text/javascript" src="../../js/jq/jquery-2.0.3.min.js"></script>-->
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <script type="text/javascript" src="../../js/vue/vue-resource.js"></script>
+</head>
+<body>
+    <div id="app01">
+        <button @click="getInfo">get请求</button>
+        <button @click="postInfo">post请求</button>
+        <button @click="jsonInfo">jsonp请求</button>
+        <br>
+        <ul>
+            <li v-for="item in objlist">{{item.name}}</li>
+        </ul>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            objlist:[
+                {name:1}
+            ]
+        },
+        methods:{
+            getInfo:function () {
+                this.$http.get("../getCar").then(function (data) {
+                    this.objlist.splice(0,this.objlist.length);
+                    // console.log(data)
+                    for(var i=0;i<data.data.data.length;i++){
+                        this.objlist.push(data.data.data[i]);
+                    }
+
+                })
+            },
+            postInfo:function () {
+                this.$http.post("../getStudent").then(function (data) {
+                    this.objlist.splice(0,this.objlist.length);
+                    for(var i=0;i<data.data.data.length;i++){
+                        this.objlist.push(data.data.data[i]);
+                    }
+
+                })
+            },
+            jsonInfo:function () {
+                this.$http.jsonp("../getTeacher").then(function (data) {
+                    console.log(data.json)
+                    // this.objlist.splice(0,this.objlist.length);
+                    // for(var i=0;i<data.data.data.length;i++){
+                    //     this.objlist.push(data.data.data[i]);
+                    // }
+                })
+            }
+        }
+    })
+</script>
+</html>

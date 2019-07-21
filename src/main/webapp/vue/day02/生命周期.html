@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生命周期</title>
+    <script type="text/javascript" src="../../js/jq/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+</head>
+<body>
+    <div id="app01">
+        <button @click="msg='no'">修改</button>
+        <p>{{ msg }}</p>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            msg:"ok"
+        },
+        /* 生命钩子 */
+        beforeCreate:function () {// data和methods都没有初始化
+            console.log(this.msg)
+        },
+        created:function () {// data和methods初始化，但el还没有初始化
+            console.log(this.msg);
+            console.log(document.getElementById("app01").innerText)
+        },
+        beforeMount:function () {// el和data等都已经初始化，但没有渲染页面，此时
+            // 只是在内存中渲染DOM对象
+            console.log(document.getElementById("app01").innerText)
+        },
+        mounted:function(){// 此时将内存中DOM对象渲染进页面
+            console.log(document.getElementById("app01").innerText)
+        },
+        beforeUpdate:function () {// data数据更新，页面加载到内存中，但页面还没有同步数据
+            console.log(document.getElementById("app01").innerText)
+        },
+        updated:function () {// 将页面数据与data数据同步
+            console.log(document.getElementById("app01").innerText)
+        },
+        beforeDestory:function () {// 此时vue中所有东西依旧可以使用
+
+        },
+        destoryed:function () {// 此时vue中所有东西都不能使用
+
+        }
+    })
+</script>
+</html>

@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>项目</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <script type="text/javascript" src="../../js/vue/vue-router.js"></script>
+    <script type="text/javascript" src="../../js/vue/axios.min.js"></script>
+    <script type="text/javascript" src="../../js/vue/vue-preview.min.js"></script>
+    <!-- 引入样式 -->
+    <link rel="stylesheet" href="https://unpkg.com/mint-ui/lib/style.css">
+    <link rel="stylesheet" href="../../css/mui/mui.css">
+    <link rel="stylesheet" href="../../css/mui/icons-extra.css">
+    <!-- 引入组件库 -->
+    <script src="https://unpkg.com/mint-ui/lib/index.js"></script>
+
+    <script src="../../js/mui/mui.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <style>
+        *{
+            touch-action: pan-x;
+        }
+        .mint-heade{
+            z-index: 99;
+        }
+        .mint-swipe{
+            height: 200px;
+        }
+        .mint-swipe-item img{
+            width: 100%;
+            height: 100%;
+        }
+        .mui-grid-view.mui-grid-9{
+            background-color: white;
+            border: none;
+        }
+        .mui-grid-view.mui-grid-9 .mui-table-view-cell{
+            border: none;
+        }
+        .v-enter{
+            opacity: 0;
+            transform: translateX(100%);
+        }
+        .v-leave-to{
+            opacity: 0;
+            transform: translateX(-100%);
+            position: absolute;
+        }
+        .v-enter-active,.v-leave-active{
+            transition: all 0.6s ease;
+        }
+        .mui-ellipsis{
+            font-size: 12px;
+            color: #226aff;
+            display: flex;
+            justify-content: space-between;
+        }
+        .mui-table-view h1{
+            font-size: 14px;
+        }
+        .app-container{
+            padding-top: 40px;
+            padding-bottom: 50px;
+            overflow-x: hidden;
+        }
+        .newInfo-container{
+            padding: 0 4px;
+
+        }
+        .title{
+            font-size: 16px;
+            text-align: center;
+            color: red;
+            margin: 15px 0;
+        }
+        .subtitle{
+            font-size: 13px;
+            color: #22a6ff;
+            display: flex;
+            justify-content: space-between;
+        }
+        .content img{
+            width: 100%;
+        }
+        .cmt-container h3{
+            font-size: 18px;
+        }
+        .cmt-container textarea{
+            font-size: 14px;
+            height: 85px;
+            margin: 0;
+        }
+        .cmt-list{
+            margin: 5px 0;
+        }
+        .cmt-title{
+            line-height: 35px;
+            background-color: #ccc;
+        }
+        .cmt-body{
+            line-height: 35px;
+            text-indent: 2em;
+        }
+        .cmt-item{
+            font-size: 13px;
+        }
+        .mui-bar-tab .mui-tab-item-lib.mui-active {
+            color: #007aff;
+        }
+        .mui-bar-tab .mui-tab-item-lib {
+            display: table-cell;
+            overflow: hidden;
+            width: 1%;
+            height: 50px;
+            text-align: center;
+            vertical-align: middle;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            color: #929292;
+        }
+        .mui-bar-tab .mui-tab-item-lib .mui-icon {
+            top: 3px;
+            width: 24px;
+            height: 24px;
+            padding-top: 0;
+            padding-bottom: 0;
+        }
+        .mui-bar-tab .mui-tab-item-lib .mui-icon ~ .mui-tab-label {
+            font-size: 11px;
+            display: block;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        .photo-list img[lazy=loading] {
+            width: 40px;
+            height: 300px;
+            margin: auto;
+        }
+        .photo-list{
+            list-style: none;
+            margin: 0;
+            padding: 10px;
+            padding-bottom: 0;
+        }
+        .photo-list li{
+            background-color: #ccc;
+            text-align: center;
+            margin-bottom: 10px;
+            box-shadow: 0 0 6px;
+        }
+        .photo-list img{
+            width: 100%;
+            vertical-align: middle;
+        }
+        .info{
+            color: white;
+            text-align: left;
+            position:absolute;
+            bottom: 0;
+            background-color: rgba(0,0,0,0.4);
+            max-height: 84px;
+        }
+        .info-title{
+            font-size: 14px;
+        }
+        .info-body{
+            font-size: 13px;
+        }
+        .photoinfo-container{
+            padding: 3px;
+        }
+        .photoinfo-container h3{
+            color:#26a2ff;
+            font-size:15px;
+            text-align: center;
+            margin: 15px 0;
+        }
+        .photoinfo-container .subtitle{
+            display: flex;
+            justify-content: space-between;
+            font-size: 13px;
+        }
+        .photoinfo-container .content{
+            font-size: 13px;
+            line-height: 30px;
+        }
+    </style>
+</head>
+<body style="background-color: white">
+    <div id="app01"></div>
+    <template id="tem">
+        <div class="app-container">
+            <!-- 顶部 -->
+            <mt-header fixed title="好玩的Vue"></mt-header>
+            <!-- 中间 -->
+            <transition mode="out-in">
+                <router-view></router-view>
+            </transition>
+            <!-- 底部 -->
+            <nav class="mui-bar mui-bar-tab">
+                <router-link class="mui-tab-item-lib" to="/home">
+                    <span class="mui-icon mui-icon-home"></span>
+                    <span class="mui-tab-label">首页</span>
+                </router-link>
+                <router-link class="mui-tab-item-lib" to="/member">
+                    <span class="mui-icon mui-icon-contact"></span>
+
+                    <span class="mui-tab-label">会员</span>
+                </router-link>
+                <router-link class="mui-tab-item-lib" to="/shopcar">
+                    <span class="mui-icon mui-icon-extra mui-icon-extra-cart"><span class="mui-badge">0</span></span>
+                    <span class="mui-tab-label">购物车</span>
+                </router-link>
+                <router-link class="mui-tab-item-lib" to="/search">
+                    <span class="mui-icon mui-icon-search"></span>
+                    <span class="mui-tab-label">搜索</span>
+                </router-link>
+            </nav>
+        </div>
+    </template>
+
+    <template id="home">
+        <div>
+            <mt-swipe :auto="4000">
+                <mt-swipe-item v-for="item in imgList" :key="item.id"><img :src="item.imgUrl"></mt-swipe-item>
+            </mt-swipe>
+            <ul class="mui-table-view mui-grid-view mui-grid-9">
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><router-link to="/home/newList">
+                    <span class="mui-icon mui-icon-home"></span>
+                    <div class="mui-media-body">新闻资讯</div></router-link></li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><router-link to="/home/imgList">
+                    <span class="mui-icon mui-icon-email"><span class="mui-badge">5</span></span>
+                    <div class="mui-media-body">图片分享</div></router-link></li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
+                    <span class="mui-icon mui-icon-chatbubble"></span>
+                    <div class="mui-media-body">商品购买</div></a></li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
+                    <span class="mui-icon mui-icon-location"></span>
+                    <div class="mui-media-body">留言反馈</div></a></li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
+                    <span class="mui-icon mui-icon-search"></span>
+                    <div class="mui-media-body">视频专区</div></a></li>
+                <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3"><a href="#">
+                    <span class="mui-icon mui-icon-phone"></span>
+                    <div class="mui-media-body">联系我们</div></a></li>
+            </ul>
+        </div>
+    </template>
+
+    <template id="member">
+        <div>
+            <h3>会员</h3>
+        </div>
+    </template>
+
+    <template id="shopcar">
+        <div>
+            <h3>购物车</h3>
+        </div>
+    </template>
+
+    <template id="search">
+        <div>
+            <h3>搜索</h3>
+        </div>
+    </template>
+
+    <!-- 景色列表 -->
+    <template id="newList">
+        <div>
+            <ul class="mui-table-view">
+                <li class="mui-table-view-cell mui-media" v-for="item in newList" :key="item.id">
+                    <router-link :to="'/home/newInfo/'+item.id">
+                        <img class="mui-media-object mui-pull-left" :src="item.imgUrl">
+                        <div class="mui-media-body">
+                            <h1>{{item.title}}</h1>
+                            <p class='mui-ellipsis'>
+                                <span>{{item.time | dateFormat('YYYY-MM-DD')}}</span>
+                                <span>点击:{{item.count}}次</span>
+                            </p>
+                        </div>
+                    </router-link>
+                </li>
+
+            </ul>
+        </div>
+    </template>
+
+    <!-- 景色详情 -->
+    <template id="newInfo">
+        <div class="newInfo-container">
+            <!-- 标题 -->
+            <h3 class="title">{{item.title}}</h3>
+            <p class="subtitle">
+                <span>{{item.time | dateFormat('YYYY-MM-DD HH-MM-SS')}}</span>
+                <span>点击:{{item.count}}次</span>
+            </p>
+            <hr>
+            <!-- 内容 -->
+            <div class="content" v-html="item.content"></div>
+            <!-- 评论 -->
+            <cmt></cmt>
+        </div>
+    </template>
+
+    <!-- 评论组件 -->
+    <template id="cmt">
+        <div class="cmt-container">
+            <h3>发表评论</h3>
+            <hr>
+            <textarea placeholder="请输入评论内容(最多120个字)" maxlength="120" v-model="mycomment"></textarea>
+            <mt-button type="primary" size="large" @click="subComment">发表评论</mt-button>
+            <div class="cmt-list">
+                <div class="cmt-item" v-for="(item,i) in comments" :key="item.id">
+                    <div class="cmt-title">
+                        第{{i+1}}楼&nbsp;&nbsp;用户:{{item.name}}&nbsp;&nbsp;发表时间:{{item.time | dateFormat('YYYY-MM-DD HH:MM:SS')}}
+                    </div>
+                    <div class="cmt-body">{{item.content}}</div>
+                </div>
+            </div>
+            <mt-button type="danger" size="large" @click="addMoreComments">加载更多</mt-button>
+        </div>
+    </template>
+
+    <!-- 图片分享 -->
+    <template id="imgList">
+        <div>
+            <!-- 滑动条 -->
+            <div id="slider" class="mui-slider">
+                <div id="sliderSegmentedControl" class="mui-scroll-wrapper mui-slider-indicator mui-segmented-control mui-segmented-control-inverted">
+                    <div class="mui-scroll">
+                        <a :class="['mui-control-item',item.id==0? 'mui-active':''] " href="#item1mobile" data-wid="tab-top-subpage-1.html"
+                           v-for="item in type" :key="item.id" @click="getImgListById(item.id)">
+                            {{item.name}}
+                        </a>
+                        <!--<a class="mui-control-item" href="#item2mobile" data-wid="tab-top-subpage-2.html">-->
+                            <!--个园-->
+                        <!--</a>-->
+                        <!--<a class="mui-control-item" href="#item3mobile" data-wid="tab-top-subpage-3.html">-->
+                            <!--何园-->
+                        <!--</a>-->
+                        <!--<a class="mui-control-item" href="#item4mobile" data-wid="tab-top-subpage-4.html">-->
+                            <!--东关街-->
+                        <!--</a>-->
+                        <!--<a class="mui-control-item" href="#item5mobile" data-wid="tab-top-subpage-5.html">-->
+                            <!--廋西湖-->
+                        <!--</a>-->
+                        <!--<a class="mui-control-item" href="#item4mobile" data-wid="tab-top-subpage-4.html">-->
+                            <!--宋夹城-->
+                        <!--</a>-->
+                        <!--<a class="mui-control-item" href="#item5mobile" data-wid="tab-top-subpage-5.html">-->
+                            <!--大明寺-->
+                        <!--</a>-->
+                    </div>
+                </div>
+            </div>
+            <!-- 列表 -->
+            <div class="imgListLazy">
+                <ul class="photo-list">
+                    <router-link v-for="item in list" :key="item.id" tag="li" :to="'/home/phoneInfo/'+item.id">
+                        <img v-lazy="item.imgUrl">
+                        <div class="info">
+                            <h1 class="info-title">aaaaa</h1>
+                            <div class="info-body">bbbbbbbbbbbbbbbb</div>
+                        </div>
+                    </router-link>
+                </ul>
+            </div>
+        </div>
+    </template>
+
+    <template id="photoInfo">
+        <div class="photoinfo-container">
+            <h3>{{photoinfo.title}}</h3>
+            <p class="subtitle">
+                <span>发表时间:{{photoinfo.time | dateFormat('YYYY-MM-DD HH:MM:SS')}}</span>
+                <span>点击:{{photoinfo.count}}</span>
+            </p>
+            <hr>
+
+            <!-- 缩略图 -->
+            <img class="preview-img" v-for="(item, index) in list" :src="item.src" height="100" @click="window.open(index, list)">
+            <!-- 图片内容 -->
+            <div class="content" v-html="photoinfo.content"></div>
+
+            <!--评论组件-->
+            <comment-box></comment-box>
+        </div>
+    </template>
+</body>
+<script>
+    //引入veu-preview
+    // import VuePreview from '../../js/vue/vue-preview.min';
+    // Vue.use(VuePreview);
+    /* 时间过滤器 */
+    Vue.filter('dateFormat',function (date,pattern) {
+        return moment(date).format(pattern)
+    });
+
+    var tem = {
+        template:"#tem"
+    };
+    var home = {
+        template:"#home",
+        data:function () {
+            return {imgList:[{id:1,imgUrl:'http://n2-q.mafengwo.net/s8/M00/61/64/wKgBpVVYQYiAA_WhAEIGXRQSUi043.jpeg?imageMogr2%2Fthumbnail%2F%21305x183r%2Fgravity%2FCenter%2Fcrop%2F%21305x183%2Fquality%2F100'}]}
+        },
+        created:function () {
+            this.getImgInfo();
+        },
+        methods:{
+            getImgInfo:function () {
+                var _this = this;
+                axios.get("../getImg").then(function (data) {
+                    _this.imgList = data.data.data;
+                })
+            }
+        }
+    };
+    var member = {
+        template:"#member"
+    };
+    var shopcar = {
+        template:"#shopcar"
+    };
+    var search = {
+        template:"#search"
+    };
+
+    /* 评论组件 */
+    var cmt = {
+        template:"#cmt",
+        data:function () {
+            return {id:1,comments:[],mycomment:''}
+        },
+        created:function () {
+            this.getComments();
+        },
+        methods:{
+            getComments:function () {
+                var _this = this;
+                axios.get('../getComments',{params:{id:this.id}}).then(function(data){
+                    if(data.data.data.length == 0){
+                        /* 使用mint-ui的toast消息提示 */
+                        _this.id = _this.id-1;
+                        _this.$toast("没有更多评论!")
+                    }else{
+                        _this.comments = _this.comments.concat(data.data.data);
+                    }
+                })
+            },
+            /* 加载更多评论 */
+            addMoreComments:function () {
+                this.id = this.id+1;
+                this.getComments();
+            },
+            subComment:function () {
+                if(this.mycomment.trim().length == 0){
+                    this.$toast("评论不能为空!")
+                }else{
+                    var _this = this;
+                    axios.post('../addComment',{content:this.mycomment}).then(function (data) {
+                        if(data.data.data == 1){
+                            _this.$toast("评论成功!");
+                            _this.comments.unshift({name:'匿名用户',time:Date.now(),content:_this.mycomment});
+                            _this.mycomment = ""
+                        }else{
+                            _this.$toast("评论失败!");
+                        }
+                    })
+                }
+            }
+        }
+    };
+
+    /* 列表 */
+    var newList = {
+        template:"#newList",
+        data:function () {
+            return {newList:[]}
+        },
+        created:function () {
+            this.getNewList();
+        },
+        methods:{
+            getNewList:function () {
+                var _this = this;
+                axios.get('../getNewList').then(function(data){
+                    _this.newList = data.data.data;
+                })
+            }
+        }
+    };
+
+    /* 详情 */
+    var newInfo = {
+        template:"#newInfo",
+        data:function () {
+            return {id:this.$route.params.id,item:''}
+        },
+        created:function () {
+            this.getNewInfo(this.id);
+        },
+        methods:{
+            getNewInfo:function (id) {
+                var _this = this;
+                axios.get('../getNewInfo',{params:{id:id}}).then(function(data){
+                    _this.item = data.data.data;
+                })
+            },
+        },
+        components:{
+            cmt:cmt
+        }
+    };
+
+    /* 图片详情 */
+    var photoInfo = {
+        template:"#photoInfo",
+        data:function () {
+            // id接受路由传值
+            return {id:this.$route.query.id,photoinfo:'',list:[{
+                    src:'http://p1-q.mafengwo.net/s11/M00/D6/57/wKgBEFraxiSAEYwvADLpXvfDlf820.jpeg?imageMogr2%2Fthumbnail%2F%21690x370r%2Fgravity%2FCenter%2Fcrop%2F%21690x370%2Fquality%2F100',
+                    w:600,
+                    h:400
+                }]}
+        },
+        created:function () {
+            this.getPhotoInfo(this.id);
+        },
+        methods:{
+            getPhotoInfo:function (id) {
+                var _this = this;
+                axios.get('../getPhotoInfo',{params:{id:id}}).then(function(data){
+                    _this.photoinfo = data.data.data;
+                })
+            }
+        },
+        components:{
+            /* 注册评论组件 */
+          'comment-box':cmt
+        }
+    }
+
+    /* 图片分享 */
+    var imgList = {
+        template:"#imgList",
+        data:function () {
+            return {type:[],list:[]}
+        },
+        created:function () {
+            this.getType();
+            this.getImgListById(0);
+        },
+        mounted:function () {
+            /* 初始化滚动条，否则需要刷新后才能滚动 */
+            mui('.mui-scroll-wrapper').scroll({
+                deceleration: 0.0005 //flick 减速系数，系数越大，滚动速度越慢，滚动距离越小，默认值0.0006
+            });
+        },
+        methods:{
+            getType:function () {
+                var _this = this;
+                axios.get('../getType').then(function(data){
+                    _this.type = data.data.data;
+                    _this.type.unshift({id:0,name:'全部'})
+                })
+            },
+            getImgListById:function (id) {
+                var _this = this;
+                axios.get('../getImgListById',{params:{id:id}}).then(function(data){
+                    _this.list = data.data.data;
+                })
+            }
+        }
+    }
+
+
+    /* 路由规则 */
+    var routerObj = new VueRouter({
+        routes:[
+            {path:'/',redirect:'/home'},
+            {path:'/home',component:home},
+            {path:'/member',component:member},
+            {path:'/shopcar',component:shopcar},
+            {path:'/search',component:search},
+            {path:'/home/newList',component:newList},
+            {path:'/home/newInfo/:id',component:newInfo},
+            {path:'/home/imgList',component:imgList},
+            {path:'/home/phoneInfo/:id',component:photoInfo},
+        ],
+        linkActiveClass:"mui-active"
+    })
+
+    var vm = new Vue({
+        el:"#app01",
+        router:routerObj,
+        render:function (createElement) {
+            return createElement(tem)
+        },
+    })
+</script>
+</html>

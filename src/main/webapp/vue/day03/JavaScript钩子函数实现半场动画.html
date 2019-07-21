@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>JavaScript钩子函数实现半场动画</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/animate.css@3.5.1" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <style>
+        .ball{
+            width: 15px;
+            height: 15px;
+            border-radius: 50%;
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <div id="app01">
+        <button class="btn btn-primary" @click="flag=!flag">切换</button>
+        <transition
+                v-on:before-enter="beforeEnter"
+                v-on:enter="enter"
+                v-on:after-enter="afterEnter">
+            <div class="ball" v-show="flag"></div>
+        </transition>
+    </div>
+</body>
+<script>
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            flag:false,
+        },
+        methods:{
+            beforeEnter:function (el) {// 动画执行之前，el为需要执行动画的元素，是一个原生的js DOM对象
+                el.style.transform = "translate(0,0)"
+            },
+            enter:function (el,done) {// 动画执行
+                /* 下面一行可以理解为强制动画的刷新，即实现动画过程 */
+                el.offsetHeight;
+                el.offsetWidth
+                el.style.transform = "translate(150px,450px)";
+                el.style.transition = "all 1s ease";
+                /*
+                    当只用 JavaScript 过渡的时候，在 enter 和 leave 中必须使用
+                    done 进行回调。否则，它们将被同步调用，过渡会立即完成。
+                    相当于执行了afterEnter方法
+                */
+                done();
+            },
+            afterEnter:function (el) {
+                this.flag = !this.flag;
+            }
+        }
+    })
+</script>
+</html>

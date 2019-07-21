@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>品牌管理</title>
+    <script type="text/javascript" src="../../js/jq/jquery-2.0.3.min.js"></script>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <!--<script type="text/javascript" src="../../js/moment/moment.js"></script>-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.24.0/moment.min.js"></script>
+    <link rel="stylesheet" href="../../css/bootstrap.min.css">
+</head>
+<body>
+    <div id="app01">
+        id:<input type="text" v-model="id"/>
+        name:<input type="text" v-model="name"  @keyup.f2="add"/>
+        <input type="button" value="增加" @click="add"/>
+        <!--v-focus是自定义的指令-->
+        根据关键字查询:<input type="text" v-model="keyword" v-focus v-color="'green'" v-fontsize="'20px'" v-fontweight="'200'"/>
+        <table border="1px" cellspacing="0">
+            <thead>
+            <td>学号</td>
+            <td>姓名</td>
+            <td>时间</td>
+            <td>操作</td>
+            </thead>
+            <tr v-for="item in search(keyword)" :key="item.id">
+                <td>{{ item.id }}</td>
+                <td>{{ item.name }}</td>
+                <td>{{ item.date | dateformat }}</td>
+                <td><a href="" @click.prevent="del(item.id)">删除</a></td>
+            </tr>
+        </table>
+    </div>
+</body>
+<script>
+
+    /* 自定义指令 */
+    /*
+        第一个参数为自定义指令的名称，
+        第二个参数是一个对象，有一些指令相关的函数，
+            在每个函数的中第一个永远是el（也可以是其他名称），表示原生的DOM对象
+    */
+    Vue.directive("focus",{
+        bind:function (el) {// 当指令绑定到元素上时执行
+
+        },
+        inserted:function (a) {// 当元素插入到DOM中时执行
+            a.focus();
+        },
+        updated:function (el) {// 当数据发生改变时执行
+
+        }
+    });
+
+    /* 全局指令 */
+    Vue.directive("color",{
+        bind:function (el,binding) {
+            console.log(binding.name);// 获取指令名
+            console.log(binding.value);// 获取指令值
+            console.log(binding.expression);// 获取指令表达式
+            // console.log(binding.arg);// 获取传给指令的参数
+            // console.log(binding.modifiers);// 获取包含修饰符的对象
+            el.style.color = binding.value;
+        }
+    })
+
+    /* 自定义键盘修饰符 */
+    Vue.config.keyCodes.f2 = 113;
+    Vue.filter("dateformat",function (date) {
+        // var moment = require('moment');
+        return moment(date,"yyyy-MM-dd hh:mm:ss").format();
+    })
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            id:"",
+            name:"",
+            keyword:"",
+            list:[
+                {id:1,name:"张三",date:new Date()},
+                {id:2,name:"李四",date:new Date()},
+                {id:3,name:"王五",date:new Date()}
+            ]
+        },
+        methods:{
+            add:function () {
+                this.list.push({id:this.id,name:this.name,date:new Date()});
+                this.id = "";
+                this.name = ""
+            },
+            del:function (id) {
+                // this.list.some((item,i)=>{
+                //     if(item.id == id){
+                //         this.list.splice(i,1);
+                //          return true;
+                //     }
+                // })
+                var index = this.list.findIndex((item)=>{
+                    if(item.id == id){
+                        return true;
+                    }
+                });
+                this.list.splice(index,1);
+            },
+            search:function (keyword) {
+                return this.list.filter(item =>{
+                    if(item.name.includes(keyword)){
+                        return item;
+                     }
+                })
+            }
+        },
+        /* 私有指令 */
+        directives:{
+            fontsize:{
+                bind:function (el,binding) {
+                    el.style.fontSize = binding.value;
+                }
+            },
+            /* 如果只想用bind和updated钩子，则可以使用下面的简写 */
+            fontweight:function (el,binding) {
+                el.style.fontWeight = binding.value;
+            }
+        }
+    })
+</script>
+</html>

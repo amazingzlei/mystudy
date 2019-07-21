@@ -1,0 +1,230 @@
+
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" dir="ltr">
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8"/>
+
+    <title>Plupload - Events example</title>
+
+    <!-- production -->
+    <script type="text/javascript" src="../js/plupload/plupload.full.min.js"></script>
+
+</head>
+<body style="font: 13px Verdana; background: #eee; color: #333">
+
+<h1>Events example</h1>
+
+<div id="container">
+    <a id="pickfiles" href="javascript:;">[Select files]</a>
+    <a id="uploadfiles" href="javascript:;">[Upload files]</a>
+</div>
+
+<br />
+<pre id="console"></pre>
+
+<script type="text/javascript">
+    var uploader = new plupload.Uploader({
+        // 用来指定上传方式，指定多个上传方式请使用逗号隔开。
+        runtimes : 'silverlight,html5',
+        // 触发文件选择对话框的DOM元素，当点击该元素后便后弹出文件选择对话框。该值可以是DOM元素对象本身，也可以是该DOM元素的id
+        browse_button : 'pickfiles', // you can pass in id...
+        // 服务器端接收和处理上传文件的脚本地址
+        url : '../plupload/upload',
+        // 分片上传文件时，每片文件被切割成的大小，为数字时单位为字节。也可以使用一个带单位的字符串，如"200kb"。当该值为0时表示不使用分片上传功能
+        chunk_size : '1mb',
+        // 当值为true时会为每个上传的文件生成一个唯一的文件名，并作为额外的参数post到服务器端，参数明为name,值为生成的文件名。
+        unique_names : true,
+
+        // 可以使用该参数对将要上传的图片进行压缩，该参数是一个对象
+        resize : { width : 320, height : 240, quality : 90 },
+
+        // 可以使用该参数来限制上传文件的类型，大小等，该参数以对象的形式传入
+        filters : {
+            max_file_size : '10mb',
+
+            // Specify what files to browse for
+            mime_types: [
+                {title : "Image files", extensions : "jpg,gif,png"},
+                {title : "Zip files", extensions : "zip"}
+            ]
+        },
+
+        // flash上传组件的url地址
+        flash_swf_url : '../js/Moxie.swf',
+
+        // silverlight上传组件的url地址
+        silverlight_xap_url : '../js/Moxie.xap',
+
+        // 初始化时绑定函数
+        init : {
+            // 当Plupload初始化完成后触发监听函数参数
+            Init: function(up, info) {
+                log('[Init]', 'Info:', info, 'Features:', up.features);
+            },
+
+            // 当上传队列中某一个文件开始上传后触发监听函数参数
+            UploadFile: function(up, file) {
+                log('[UploadFile]', file);
+            },
+
+            // 当Init事件发生后触发监听函数参数
+            PostInit: function() {
+                // Called after initialization is finished and internal event handlers bound
+                log('[PostInit]');
+
+                document.getElementById('uploadfiles').onclick = function() {
+                    uploader.start();
+                    return false;
+                };
+            },
+
+            Browse: function(up) {
+                // Called when file picker is clicked
+                log('[Browse]');
+            },
+
+            // 当调用plupload实例的refresh()方法后会触发该事件
+            Refresh: function(up) {
+                // Called when the position or dimensions of the picker change
+                log('[Refresh]');
+            },
+
+            // 当上传队列的状态发生改变时触发监听函数参数
+            StateChanged: function(up) {
+                // Called when the state of the queue is changed
+                log('[StateChanged]', up.state == plupload.STARTED ? "STARTED" : "STOPPED");
+            },
+
+            // 当上传队列发生变化后触发，即上传队列新增了文件或移除了文件。QueueChanged事件会比FilesAdded或FilesRemoved事件先触发监听函数参数
+            QueueChanged: function(up) {
+                // Called when queue is changed by adding or removing files
+                log('[QueueChanged]');
+            },
+
+            // 当使用Plupload实例的setOption()方法改变当前配置参数后触发监听函数参数
+            OptionChanged: function(up, name, value, oldValue) {
+                // Called when one of the configuration options is changed
+                log('[OptionChanged]', 'Option Name: ', name, 'Value: ', value, 'Old Value: ', oldValue);
+            },
+
+            // 当队列中的某一个文件正要开始上传前触发监听函数参数
+            BeforeUpload: function(up, file) {
+                // Called right before the upload for a given file starts, can be used to cancel it if required
+                log('[BeforeUpload]', 'File: ', file);
+            },
+
+            // 会在文件上传过程中不断触发，可以用此事件来显示上传进度监听函数参数
+            UploadProgress: function(up, file) {
+                // Called while file is being uploaded
+                log('[UploadProgress]', 'File:', file, "Total:", up.total);
+            },
+
+            // 该事件会在每一个文件被添加到上传队列前触发监听函数参数
+            FileFiltered: function(up, file) {
+                // Called when file successfully files all the filters
+                log('[FileFiltered]', 'File:', file);
+            },
+
+            // 当文件添加到上传队列后触发监听函数参数
+            FilesAdded: function(up, files) {
+                // Called when files are added to queue
+                log('[FilesAdded]');
+
+                plupload.each(files, function(file) {
+                    log('  File:', file);
+                });
+            },
+
+            FilesRemoved: function(up, files) {
+                // Called when files are removed from queue
+                log('[FilesRemoved]');
+
+                plupload.each(files, function(file) {
+                    log('  File:', file);
+                });
+            },
+
+            // 当队列中的某一个文件上传完成后触发监听函数参数
+            FileUploaded: function(up, file, info) {
+                // Called when file has finished uploading
+                log('[FileUploaded] File:', file, "Info:", info);
+            },
+
+            // 当使用文件小片上传功能时，每一个小片上传完成后触发监听函数
+            ChunkUploaded: function(up, file, info) {
+                // Called when file chunk has finished uploading
+                log('[ChunkUploaded] File:', file, "Info:", info);
+            },
+
+            // 当上传队列中所有文件都上传完成后触发监听函数
+            UploadComplete: function(up, files) {
+                // Called when all files are either uploaded or failed
+                log('[UploadComplete]');
+            },
+
+            // 当调用destroy方法时触发监听函数
+            Destroy: function(up) {
+                // Called when uploader is destroyed
+                log('[Destroy] ');
+            },
+
+            // 当发生错误时触发监听函数
+            Error: function(up, args) {
+                // Called when error occurs
+                log('[Error] ', args);
+            }
+        }
+    });
+
+
+    // 输入信息
+    function log() {
+        var str = "";
+
+        plupload.each(arguments, function(arg) {
+            var row = "";
+
+            if (typeof(arg) != "string") {
+                plupload.each(arg, function(value, key) {
+                    // Convert items in File objects to human readable form
+                    if (arg instanceof plupload.File) {
+                        // Convert status to human readable
+                        switch (value) {
+                            case plupload.QUEUED:
+                                value = 'QUEUED';
+                                break;
+
+                            case plupload.UPLOADING:
+                                value = 'UPLOADING';
+                                break;
+
+                            case plupload.FAILED:
+                                value = 'FAILED';
+                                break;
+
+                            case plupload.DONE:
+                                value = 'DONE';
+                                break;
+                        }
+                    }
+
+                    if (typeof(value) != "function") {
+                        row += (row ? ', ' : '') + key + '=' + value;
+                    }
+                });
+
+                str += row + " ";
+            } else {
+                str += arg + " ";
+            }
+        });
+
+        var log = document.getElementById('console');
+        log.innerHTML += str + "\n";
+    }
+
+    uploader.init();
+
+</script>
+</body>
+</html>

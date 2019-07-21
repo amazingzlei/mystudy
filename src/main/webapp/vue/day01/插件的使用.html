@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>插件的使用</title>
+    <script type="text/javascript" src="../../js/vue/vue.js"></script>
+    <!--1.引入插件-->
+    <script type="text/javascript" src="../../js/vue/v-my-plugin.js"></script>
+</head>
+<body>
+    <div id="app01">
+        <p v-my-directive="msg"></p>
+    </div>
+</body>
+<script>
+    // 必须声明使用插件
+    Vue.use(MyPlugin)// 内部执行MyPlugin.install
+    /*使用方法*/
+    Vue.myGlobalMethod();
+    var vm = new Vue({
+        el:"#app01",
+        data:{
+            msg:"i like you"
+        }
+    })
+    vm.$myMethod();
+</script>
+</html>

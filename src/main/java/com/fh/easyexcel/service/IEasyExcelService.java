@@ -15,9 +15,9 @@ public interface IEasyExcelService {
 
     List<Classes> getAllClasses();
 
-    Integer readOneSheet(MultipartFile file);
+    Integer readStudentSheet(MultipartFile file);
 
-    Integer readMoreSameSheet(MultipartFile file);
+    Integer readMoreDataSheet(MultipartFile file);
 
     Integer readFixName(MultipartFile file);
 

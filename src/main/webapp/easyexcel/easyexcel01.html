@@ -97,7 +97,7 @@
         var files=$('#files03')[0].files;
         formData.append('file', files[0]);
         formData.append('sheetNum', 2);
-        formData.append('headLineNum', 0);
+        formData.append('headLineNum', 1);
         $.ajax({
             url:"../easyexcel/readFixedSheet",
             type: "POST",

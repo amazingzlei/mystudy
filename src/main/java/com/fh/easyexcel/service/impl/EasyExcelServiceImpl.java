@@ -51,7 +51,7 @@ public class EasyExcelServiceImpl implements IEasyExcelService {
      * @return
      */
     @Override
-    public Integer readOneSheet(MultipartFile file) {
+    public Integer readStudentSheet(MultipartFile file) {
         List<Object> students = ExcelUtil.readExcel(file, new Student());
         int count = 0;
         if(!CollectionUtils.isEmpty(students)){
@@ -78,7 +78,7 @@ public class EasyExcelServiceImpl implements IEasyExcelService {
      * @return
      */
     @Override
-    public Integer readMoreSameSheet(MultipartFile file) {
+    public Integer readMoreDataSheet(MultipartFile file) {
         List<Object> students = ExcelUtil.readExcel(file, new Student(), 1);
         List<Object> teachers = ExcelUtil.readExcel(file, new Teacher(), 2);
         List<Object> classes = ExcelUtil.readExcel(file, new Classes(), 3);

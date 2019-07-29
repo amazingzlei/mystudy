@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class ExcelUtil {
     /**
-     * 读取 Excel(多个 sheet)
+     * 读取 Excel(多个 sheet) (全部读取，不区sheet页和行数)
      *
      * @param excel    文件
      * @param rowModel 实体类映射，继承 BaseRowModel 类
@@ -51,7 +51,7 @@ public class ExcelUtil {
      */
     public static List<Object> readFixedNameExcel(MultipartFile excel, BaseRowModel rowModel) {
         ExcelFixedNameListener excelListener = new ExcelFixedNameListener();
-        ExcelReader reader = getFixedNameReader(excel,excelListener);
+        ExcelReader reader = getFixedNameReader(excel, excelListener);
         if (reader == null) {
             return null;
         }
@@ -65,7 +65,7 @@ public class ExcelUtil {
     }
 
     /**
-     * 读取某个 sheet 的 Excel
+     * 读取某个 sheet 的 Excel sheet页，即指定sheet页
      *
      * @param excel    文件
      * @param rowModel 实体类映射，继承 BaseRowModel 类
@@ -94,6 +94,50 @@ public class ExcelUtil {
         }
         reader.read(new Sheet(sheetNo, headLineNum, rowModel.getClass()));
         return excelListener.getDatas();
+    }
+
+    /**
+     * 返回 ExcelReader
+     *
+     * @param excel         需要解析的 Excel 文件
+     * @param excelListener new ExcelListener()
+     */
+    private static ExcelReader getReader(MultipartFile excel,
+                                         ExcelListener excelListener) {
+        String filename = excel.getOriginalFilename();
+        if (filename == null || (!filename.toLowerCase().endsWith(".xls") && !filename.toLowerCase().endsWith(".xlsx"))) {
+            throw new ExcelException("文件格式错误！");
+        }
+        InputStream inputStream;
+        try {
+            inputStream = new BufferedInputStream(excel.getInputStream());
+            return new ExcelReader(inputStream, null, excelListener, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    /**
+     * 返回 ExcelReader
+     *
+     * @param excel         需要解析的 Excel 文件
+     * @param excelListener new ExcelListener()
+     */
+    private static ExcelReader getFixedNameReader(MultipartFile excel,
+                                                  ExcelFixedNameListener excelListener) {
+        String filename = excel.getOriginalFilename();
+        if (filename == null || (!filename.toLowerCase().endsWith(".xls") && !filename.toLowerCase().endsWith(".xlsx"))) {
+            throw new ExcelException("文件格式错误！");
+        }
+        InputStream inputStream;
+        try {
+            inputStream = new BufferedInputStream(excel.getInputStream());
+            return new ExcelReader(inputStream, null, excelListener, false);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     /**
@@ -151,48 +195,5 @@ public class ExcelUtil {
         }
     }
 
-    /**
-     * 返回 ExcelReader
-     *
-     * @param excel         需要解析的 Excel 文件
-     * @param excelListener new ExcelListener()
-     */
-    private static ExcelReader getReader(MultipartFile excel,
-                                         ExcelListener excelListener) {
-        String filename = excel.getOriginalFilename();
-        if (filename == null || (!filename.toLowerCase().endsWith(".xls") && !filename.toLowerCase().endsWith(".xlsx"))) {
-            throw new ExcelException("文件格式错误！");
-        }
-        InputStream inputStream;
-        try {
-            inputStream = new BufferedInputStream(excel.getInputStream());
-            return new ExcelReader(inputStream, null, excelListener, false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 
-
-    /**
-     * 返回 ExcelReader
-     *
-     * @param excel         需要解析的 Excel 文件
-     * @param excelListener new ExcelListener()
-     */
-    private static ExcelReader getFixedNameReader(MultipartFile excel,
-                                         ExcelFixedNameListener excelListener) {
-        String filename = excel.getOriginalFilename();
-        if (filename == null || (!filename.toLowerCase().endsWith(".xls") && !filename.toLowerCase().endsWith(".xlsx"))) {
-            throw new ExcelException("文件格式错误！");
-        }
-        InputStream inputStream;
-        try {
-            inputStream = new BufferedInputStream(excel.getInputStream());
-            return new ExcelReader(inputStream, null, excelListener, false);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
 }

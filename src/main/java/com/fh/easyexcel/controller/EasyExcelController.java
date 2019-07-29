@@ -55,14 +55,14 @@ public class EasyExcelController {
 
 
     /**
-     * 读取一个sheet页或读取多个sheet
+     * 读取一个sheet页或读取多个sheet，数据类型一致即只是插入学生表
      * @param file
      * @return
      */
     @RequestMapping(value = "readOneSheet",method = RequestMethod.POST)
     @ResponseBody
     public Integer readOneSheet(@RequestParam(value = "file",required = false) MultipartFile file){
-        return iEasyExcelService.readOneSheet(file);
+        return iEasyExcelService.readStudentSheet(file);
     }
 
     /**
@@ -73,7 +73,7 @@ public class EasyExcelController {
     @RequestMapping(value = "readMoreSameSheet",method = RequestMethod.POST)
     @ResponseBody
     public Integer readMoreSameSheet(@RequestParam(value = "file",required = false) MultipartFile file){
-        return iEasyExcelService.readMoreSameSheet(file);
+        return iEasyExcelService.readMoreDataSheet(file);
     }
 
     /**

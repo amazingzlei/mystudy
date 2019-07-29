@@ -1,4 +1,4 @@
-package com.fh.plupload;
+package com.fh.plupload.controller;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
